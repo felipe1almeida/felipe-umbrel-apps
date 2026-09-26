@@ -1,3 +1,9 @@
+services:
+  app_proxy:
+    environment:
+      APP_HOST: felipe-qbittorrent_gluetun_1
+      APP_PORT: 8080
+
   gluetun:
     image: qmcgaw/gluetun:latest
     restart: on-failure
@@ -8,6 +14,7 @@
     devices:
       - /dev/net/tun:/dev/net/tun
 
+    # Credenciais NordVPN ficam SOMENTE no Umbrel
     env_file:
       - ${APP_DATA_DIR}/data/gluetun/nordvpn.env
 
@@ -19,3 +26,29 @@
 
     volumes:
       - ${APP_DATA_DIR}/data/gluetun:/gluetun
+
+  server:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    restart: on-failure
+
+    # qBittorrent usa exclusivamente a rede do Gluetun
+    network_mode: "service:gluetun"
+
+    depends_on:
+      - gluetun
+
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Lisbon
+      - WEBUI_PORT=8080
+
+      # VueTorrent
+      - DOCKER_MODS=ghcr.io/gabe565/linuxserver-mod-vuetorrent
+
+    volumes:
+      # Configuração persistente
+      - ${APP_DATA_DIR}/data/qbittorrent:/config
+
+      # Mesmos downloads usados por Radarr/Sonarr/Transmission
+      - ${UMBREL_ROOT}/data/storage/downloads:/downloads
