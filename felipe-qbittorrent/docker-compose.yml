@@ -1,6 +1,7 @@
 services:
   app_proxy:
     environment:
+      # Dashboard do Umbrel continua abrindo qBittorrent/VueTorrent
       APP_HOST: felipe-qbittorrent_gluetun_1
       APP_PORT: 8080
 
@@ -47,8 +48,27 @@ services:
       - DOCKER_MODS=ghcr.io/gabe565/linuxserver-mod-vuetorrent
 
     volumes:
-      # Configuração persistente
+      # Configuração persistente do qBittorrent
       - ${APP_DATA_DIR}/data/qbittorrent:/config
 
-      # Mesmos downloads usados por Radarr/Sonarr/Transmission
+      # Mesmos downloads usados por Radarr/Sonarr
       - ${UMBREL_ROOT}/data/storage/downloads:/downloads
+
+  flood:
+    image: jesec/flood:latest
+    restart: on-failure
+
+    environment:
+      - HOME=/config
+
+    volumes:
+      # Configuração persistente do Flood
+      - ${APP_DATA_DIR}/data/flood:/config
+
+    ports:
+      # Flood WebUI
+      - "3000:3000"
+
+    depends_on:
+      - gluetun
+      - server
