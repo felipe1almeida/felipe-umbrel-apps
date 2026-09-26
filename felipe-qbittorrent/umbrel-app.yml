@@ -1,0 +1,25 @@
+manifestVersion: 1
+id: felipe-qbittorrent
+name: qBittorrent VPN
+tagline: qBittorrent with VueTorrent and NordVPN protection
+icon: https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/qbittorrent-logo.png
+category: files
+version: "1.0.0"
+port: 8080
+description: >-
+  qBittorrent with VueTorrent, routed through Gluetun and NordVPN.
+  Downloads are stored in Umbrel's shared Downloads directory.
+
+developer: qBittorrent
+website: https://www.qbittorrent.org
+submitter: Felipe
+submission: https://github.com/felipe1almeida/felipe-umbrel-apps
+repo: https://github.com/qbittorrent/qBittorrent
+support: https://github.com/felipe1almeida/felipe-umbrel-apps/issues
+gallery: []
+releaseNotes: >-
+  Initial release.
+dependencies: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
